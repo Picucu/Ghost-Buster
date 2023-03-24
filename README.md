@@ -1,26 +1,21 @@
 The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
 
-(__TODO__: your project name)
-
-# Shoppy Shoperson 
+# Ghost Restaurant Records
 
 ## Overview
 
-(__TODO__: a brief one or two paragraph, high-level description of your project)
+I don't like Ghost restaurants. A ghost restaurant is a restaurant or restaurant chain that doesnt have a physical storefront and is usually sold out of giant cooking complexes which can host up to a dozen of these ghost restaurants. These restuarants try their best to hide that they are infact ghost restaurants and it is very hard to find these industrial kitchen complexes which usually are located in unmarked buildings. These ghost resturants also escape safety and allergen testing by the government and do not follow guidelines. So this is a site which allow users to upload and locate ghost resturant brands and industrial kitchen locations. Users will need to create a profile and log in to suggest location/brands, which will be stored on a mongo database. Users will also be able to rate and verify these brands and locations which other users have recommened. If a user if found to have suggested many incorrect brands/locations, their internal "credit score" will de decreased and the system may not register/show their next suggestions. The site will then allow users to search through these different brands and industrial kitchens to see what is in their local area. (google maps integration?)
 
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
-
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
 
 
 ## Data Model
 
 (__TODO__: a description of your application's data and their relationships to each other) 
 
-The application will store Users, Lists and Items
+The application will store Users, Brands and Kitchens
 
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
+* users can have multiple listings of Brands/Kitchens (via references)
+* Kitchens will have restaurants (via references)
 
 (__TODO__: sample documents)
 
@@ -30,21 +25,30 @@ An Example User:
 {
   username: "shannonshopper",
   hash: // a password hash,
-  lists: // an array of references to List documents
+  posts: // an array of Brands/kitechens the user has posted
+  cscore: //a number which is determined by the amount of positive/ negative verifications the user has recived
 }
 ```
 
-An Example List with Embedded Items:
+An Example Kitchen:
 
 ```javascript
 {
   user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
+  name: "Bib",
+  Brands: //array of brands which oprate at this location,
   createdAt: // timestamp
+  tscore://Score which dictates the accuracy and how trusted this posting is
+}
+```
+An Example Brand:
+```javascript
+{
+  user: // a reference to a User object
+  name: "Burgerburger",
+  Locations: //array of location which host this brand,
+  createdAt: // timestamp
+  tscore://Score which dictates the accuracy and how trusted this posting is
 }
 ```
 
