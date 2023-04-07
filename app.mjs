@@ -41,7 +41,7 @@ app.post('/addnew', async (req,res)=>{
     brand.save().then(saved => res.redirect('/')).catch(err =>res.status(500).send('server error'))
 })
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT ?? 3000);
 
 /* 
 code snippet for addin basic markers, I have the api key still figuring out how to do this
