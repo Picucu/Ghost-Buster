@@ -1,0 +1,27 @@
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Locations
+        </th>
+    </tr>
+    {{#each brand}}
+    <tr>
+        <td>
+            {{this.name}}
+        </td>
+        <td>
+            <ul>
+                {{#each this.Locations}}
+                <li>
+                    {{this}}
+                </li>
+                {{/each}}
+            </ul>
+            
+        </td>
+    </tr>
+    {{/each}}
+</table>
