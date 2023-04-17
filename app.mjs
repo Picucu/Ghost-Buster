@@ -24,7 +24,12 @@ app.get('/',async (req, res) =>{
     }catch{
         brands={};
     }
-    res.render("table.hbs",{brand:brands,});
+    try{
+      kitchens = await Kitchens.find({}).populate('Brands','name').sort('-createdAt');
+    }catch{
+        kitchens = {};
+    }
+    res.render("table.hbs",{brand:brands,kitchen:kitchens});
 })
 app.get('/addnew', (req,res)=>{
     res.render('newBrand.hbs');
