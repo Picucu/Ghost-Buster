@@ -25,3 +25,37 @@
     </tr>
     {{/each}}
 </table>
+<hr>
+<table>
+        <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Location
+        </th>
+        <th>
+            Brands In Kitchen
+        </th>
+    </tr>
+    {{#each kitchen}}
+    <tr>
+        <td>
+            {{this.name}}
+        </td>
+        <td>
+            {{this.Location}}
+        </td>
+        <td>
+            <ul>
+                {{#each this.Brands}}
+                <li>
+                    {{this.name}}
+                </li>
+                {{/each}}
+            </ul>
+            
+        </td>
+    </tr>
+    {{/each}}
+</table>
