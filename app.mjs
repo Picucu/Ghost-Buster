@@ -42,6 +42,29 @@ app.post('/addnew', async (req,res)=>{
     brand.save().then(saved => res.redirect('/')).catch(err =>res.status(500).send('server error'))
 })
 
+app.get('/addnewKitchen', (req,res)=>{
+  res.render('newKitchen.hbs');
+});
+
+app.post('/addnewKitchen', async (req,res)=>{
+    let poster = await User.find({name:"admin"}).catch(err => res.status(500).send('no admin error'));
+    let brandsOfLoc = await Brands.find({Locations: req.body.KitchenLocation})
+    let brandIds = brandsOfLoc.map(brand =>{
+      return brand._id
+    })
+    let Kitchen = new Kitchens({
+      user:[poster[0]['_id']],
+      Location:req.body.KitchenLocation,
+      Brands:brandIds,
+      name:req.body.KitchenName,
+      tscore:50
+    })
+    Kitchen.save().then(saved => res.redirect('/')).catch(err =>{
+      res.status(500).send('server error') 
+      console.log(err)
+    })
+})
+
 app.listen(process.env.PORT ?? 3000);
 
 /* 
