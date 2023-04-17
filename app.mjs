@@ -18,12 +18,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get('/',async (req, res) =>{
     let brands = '';
+    let kitchens = '';
     try{
         brands = await Brands.find({}).sort('-createdAt');
     }catch{
         brands={};
     }
-    res.render("table.hbs",{brand:brands});
+    res.render("table.hbs",{brand:brands,});
 })
 app.get('/addnew', (req,res)=>{
     res.render('newBrand.hbs');
