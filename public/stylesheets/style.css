@@ -5,17 +5,16 @@ body {
 header {
 	background-color:wheat;
 	text-align: center;
+	height:90px;
 }
 nav {
 	height:100%;
 	width:200px;
 	position:fixed;
 	z-index:1;
-	top:174px;
-	left:8px;
+	top:auto;
 	background-color:wheat;
 	overflow-x: hidden;
-	padding-top: 20px;
 	list-style-type: none;
 }
 nav ul{

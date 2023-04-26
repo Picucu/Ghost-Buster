@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import slug from 'mongoose-slug-updater';
+import passportLocalMongoose from 'passport-local-mongoose';
 // is the environment variable, NODE_ENV, set to PRODUCTION? 
 import fs from 'fs';
 import path from 'path';
@@ -35,13 +36,15 @@ const mongooseOpts = {
 mongoose.plugin(slug);
 
 
+
 const User = new mongoose.Schema({
-    username:{type: String, required: true, minLength: 3, maxLength: 20},
-    password:{type: String, required: true, minLength: 8},
     kitchenposts:[{type: mongoose.Schema.Types.ObjectId, ref: 'Kitchen'}],
     brandposts:[{type: mongoose.Schema.Types.ObjectId, ref: 'Brand'}],
     cscore:Number
 })
+//Enable passport plugin
+User.plugin(passportLocalMongoose);
+
 const KitchenSchema = new mongoose.Schema({
     user:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     name:String,
