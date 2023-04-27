@@ -1,7 +1,7 @@
 import express from 'express';
 import './db.mjs'
 import mongoose from 'mongoose';
-import sanitize from 'mongoose-sanitize';
+import sanitize from 'express-mongo-sanitize';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import './auth.js'
@@ -33,6 +33,11 @@ app.use(function(req, res, next){
 	res.locals.user = req.user;
 	next();
 });
+app.use(sanitize({
+  replaceWith: '_',
+})
+);
+
 /* TODO: ADD CLIENT SIDE FORM VALIDATION */
 /* TODO: ADD GOOGLE MAPS FEATURE */
 
@@ -52,8 +57,6 @@ app.get('/',async (req, res) =>{
     }catch{
         kitchens = {};
     }
-    console.log('REQ.USER: ',req.user)
-    console.log('REQ.LOCALS: ',req.locals)
     res.render("table.hbs",{brand:brands,kitchen:kitchens,user:req.user});
 });
 
@@ -82,7 +85,6 @@ app.get('/login', async(req,res)=>{
 //Some magic shit happens here I have no fucking idea how it authenticates
 app.post('/login', function(req,res,next) {
   passport.authenticate('local', function(err,user) {
-    console.log('USER: ', user)
     if(user) {
       req.logIn(user, function(err) {
         res.redirect('/');
@@ -117,67 +119,116 @@ app.post('/register', async(req,res)=>{
 //Routes Add new Brand Page and handles form submittions form the same page
 
 app.get('/addnew', (req,res)=>{
+  if(req.user){
     res.render('newBrand.hbs');
-    console.log(req.user)
+  }else{
+    res.render('/login');
+  }
 });
 
 app.post('/addnew', async (req,res)=>{
     /*TODO: Add test condition to see if Brand is already in the  mongo Database.
-    NOTE: The names of the brands should be normalized/ use slugs if possible
+    NOTE: The names of the brands should be normalized
     True: Add new location to brand locations array if the location is new and see if a kitchen exists in the database at that location, if true, add this brand ID into Kitchen's Brands array .Update poster stats by adding brand ID into poster's brandposts array.
     False: Create new entry,  Update poster stats, Update Kitchen
     */
-    let brandExists = await Brands.findOne({name:req.body.BrandName, Locations:req.body.BrandLocation});
+    if(req.user){
+      //normalize brand name
+      let newBrandName = req.body.BrandName.trim().replace(/\s+/g, '-').toLowerCase();
+      let brandExists = await Brands.findOne({slug:newBrandName});
     if(brandExists){
       //Add new location to brand locations array if the location is new
-      if(!brandExists.Locations.includes(req.body.BrandLocation)){
+      if(!(brandExists.Locations.includes(req.body.BrandLocation))){
         brandExists.Locations.push(req.body.BrandLocation);
+        await brandExists.save();
+          //see if a kitchen exists in the database at that location
+        let kitchenExists = await Kitchens.findOne({location:req.body.BrandLocation});
+        if(kitchenExists){
+          //if true, add this brand ID into Kitchen's Brands array
+          if(!kitchenExists.Brands.includes(brandExists['_id'])){
+            kitchenExists.Brands.push(brandExists['_id']);
+          }
+          await kitchenExists.save();
+        }else{
+          //Create new kitchen
+          let kitchen = new Kitchens({
+            user:[req.user['_id']],
+            name:req.body.BrandLocation,
+            Location:req.body.BrandLocation,
+            Brands:[brandExists['_id']]
+          });
+          req.user.kitchenposts.push(kitchen['_id']);
+          req.user.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
+          //save new kitchen database entry
+          kitchen.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
+        }
+        //Update poster stats by adding brand ID into poster's brandposts array.
+          req.user.brandposts.push(brandExists['_id']);
+          await req.user.save();
+
+          res.redirect('/')
+      }else{
+        //if the location is already in the database, do nothing
+        res.render('newBrand.hbs',{message:'Brand already exists'})
       }
-      await brandExists.save();
+      
+      
+    }else{
+      //Create new Brand entry
+      let brand = new Brands({
+          user:[req.user['_id']],
+          Locations:[req.body.BrandLocation],
+          name:req.body.BrandName,
+          description:req.body.descp,
+          tscore:50
+      })
       //see if a kitchen exists in the database at that location
       let kitchenExists = await Kitchens.findOne({location:req.body.BrandLocation});
       if(kitchenExists){
         //if true, add this brand ID into Kitchen's Brands array
-        if(!kitchenExists.Brands.includes(brandExists['_id'])){
-          kitchenExists.Brands.push(brandExists['_id']);
+        if(!kitchenExists.Brands.includes(brand['_id'])){
+          kitchenExists.Brands.push(brand['_id']);
         }
         await kitchenExists.save();
       }else{
         //Create new kitchen
         let kitchen = new Kitchens({
-          location:req.body.BrandLocation,
-          Brands:[brandExists['_id']]
+          user:[req.user['_id']],
+          name:req.body.BrandLocation,
+          Location:req.body.BrandLocation,
+          Brands:[brand['_id']]
         });
+        //save new kitchen id into Poster kitchenposts array
+        req.user.kitchenposts.push(kitchen['_id']);
         //save new kitchen database entry
-        kitchen.save().then(saved => console.log('saved')).catch(err =>res.status(500).send('server error'));
+        kitchen.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
       }
-      //Update poster stats by adding brand ID into poster's brandposts array.
-      res.user.Brands.push(brandExists['_id']);
-
-      res.redirect('/')
-    }else{
-    //Create new Brand entry
-    let brand = new Brands({
-        user:[req.user['_id']],
-        Locations:[req.body.BrandLocation],
-        name:req.body.BrandName,
-        description:req.body.descp,
-        tscore:50
-    })
-    //save new brand database entry
-    brand.save().then(saved => res.redirect('/')).catch(err =>res.status(500).send('server error'));
+      //save brand ID into poster's brandposts array.
+      req.user.brandposts.push(brand['_id']);
+      req.user.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
+      //save new brand database entry
+      brand.save().then(saved => res.redirect('/')).catch(err => req.status(500).send(err));
+      
     }
+  }else{
+    res.redirect('/login')
+  }
 });
 
 //Routes Add new Kitchen Page and handles form submissions from the same page
 
 app.get('/addnewKitchen', (req,res)=>{
-  res.render('newKitchen.hbs');
+  if(req.user){
+    res.render('newKitchen.hbs');
+  }else{
+    res.redirect('/login')
+  }
 });
 
 
 
 app.post('/addnewKitchen', async (req,res)=>{
+    if(req.user){
     //Finds brand at location sent by user
     let brandsOfLoc = await Brands.find({Locations: req.body.KitchenLocation})
     //Extract Brand ID into an array
@@ -187,10 +238,12 @@ app.post('/addnewKitchen', async (req,res)=>{
 
     /* TODO:
       Check if already exists: (by loation)
-      True: Only add to User stats
+      True: redirect back to addnewKitchen page with error message
       False: Make new
     */
-
+    if(brandsOfLoc.length <= 0){
+      res.render('newKitchen.hbs',{message:'Kitchen already exists'})
+    }else{
     //Create New kitchen
     let Kitchen = new Kitchens({
       user:[req.user['_id']],
@@ -199,10 +252,16 @@ app.post('/addnewKitchen', async (req,res)=>{
       name:req.body.KitchenName,
       tscore:50
     });
+    req.user.kitchenposts.push(Kitchen['_id']);
+    req.user.save().then(saved => console.log('saved'));
     Kitchen.save().then(saved => res.redirect('/')).catch(err =>{
       res.status(500).send('server error') 
       console.log(err)
     });
+    }
+  }else{
+    res.redirect('/login')
+  }
 });
 
 /* TODO: ADD INDIVIDUAL PAGE FOR BRAND */
