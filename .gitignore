@@ -1,4 +1,6 @@
 node_modules
 config.json
+localhost-key.pem
+localhost.pem
 *.swo
 *.swp
