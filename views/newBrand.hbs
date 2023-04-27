@@ -1,16 +1,48 @@
+<script>
+    let activetab = document.getElementById('newBrand');
+    activetab.classList.add('active');
+</script>
 <h1>ADD A NEW BRAND HERE</h1>
+    {{!-- I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+         --}}
+        <script async
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8txkx3TcrxXxg-jhi5_VlIZJAP_MEXjo&libraries=places&callback=initAutoComplete">
+        </script>
+        {{!-- I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK  --}}
+        <script>
+            function initAutoComplete() {
+                let input = document.getElementById('Location');
+                let autocomplete = new google.maps.places.Autocomplete(input,
+                    {
+                        type:['establishment'],
+                        componentRestrictions:{'country':['us']},
+                        fields:['formatted_address']
+                    }
+                    
+                    
+                );
+            }
+        </script>
 {{#if message}}
     <h2>{{message}}</h2>
 {{/if}}
-<div>
+<div class="form-group">
     <form id="newBrandPoster" method="POST" action="/addnew">
-        Brand name:<input type="text" name="BrandName">
+        Brand name:<input type="text" name="BrandName" class="form-control">
         <br>
-        Brand Location:<input type="text" name="BrandLocation">
+        Brand Location:<input type="text" name="BrandLocation" id="Location" class="form-control">
         <br>
         Description:
-        <textarea name="descp" id="input" cols="50" rows="10"></textarea>
+        <textarea name="descp" id="input" cols="50" rows="10" class="form-control"></textarea>
         <br>
-        <input type="Submit" value="Submit">
+        <input type="Submit" value="Submit" class="btn btn-primary">
     </form>
 </div>

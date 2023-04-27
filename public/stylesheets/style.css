@@ -1,25 +1,40 @@
+main {
+	display: flex;
+	flex-wrap: nowrap;
+	height: 100vh;
+	height: -webkit-fill-available;
+	max-height: 100vh;
+	overflow-x: auto;
+	overflow-y: hidden;
+  }
 body {
 	font-family: 'Quicksand', sans-serif;
 	background-color:rgb(52, 52, 56);
 }
-header {
+.nav-link {
+	margin: 20px;
+}
+
+/* header {
 	background-color:wheat;
 	text-align: center;
 	height:90px;
-}
-nav {
-	height:100%;
+} */
+/* nav {
+	height: 100vh;
 	width:200px;
 	position:fixed;
 	z-index:1;
-	top:auto;
+	top:0;
 	background-color:wheat;
 	overflow-x: hidden;
 	list-style-type: none;
-}
-nav ul{
+} */
+/* nav ul{
 	list-style-type: none;
 	text-decoration: none;
+	top: 90px;
+	position:relative;
 	font-size: 25px;
 	display: block;
 }
@@ -29,8 +44,8 @@ nav a{
 }
 nav a:hover {
 	color: rgb(94, 94, 97);
-}
+} */
 #body {
-	margin-left: 210px;
+	margin-left: 50px;
 	color:bisque;
 }

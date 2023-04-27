@@ -6,6 +6,12 @@ import bcrypt from 'bcrypt';
 import session from 'express-session';
 import './auth.js'
 import passport from 'passport';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+var privateKey  = fs.readFileSync('localhost-key.pem', 'utf8');
+var certificate = fs.readFileSync('localhost.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
 const app = express();
 
 import url from 'url';
@@ -273,8 +279,12 @@ app.post('/logout', function(req, res, next){
   });
 });
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
-app.listen(process.env.PORT ?? 3000);
+httpServer.listen(8080);
+httpsServer.listen(8443);
+//app.listen(process.env.PORT ?? 3000);
 
 /* 
 code snippet for addin basic markers, I have the api key still figuring out how to do this
