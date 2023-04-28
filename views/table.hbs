@@ -3,17 +3,26 @@
     activetab.classList.add('active');
 </script>
 
-<table>
+<form method="POST" action="" class="needs-validation" novalidate>
+    <br>
+    <input name="search" type="text" class="form-control" placeholder="Enter a Brand Name Here" required>
+    <div class="invalid-feedback" id='searchFeedback'>
+        Please enter a Restaurant Name.
+    </div>
+    <br>
+    <input type="submit" value="Search" class="btn btn-primary">
+</form>
+<table class="table table-dark">
     <tr>
-        <th>
+        <th scope="col">
             Name
         </th>
-        <th>
+        <th scope="col">
             Locations
         </th>
     </tr>
     {{#each brand}}
-    <tr>
+    <tr scope="row">
         <td>
             {{this.name}}
         </td>
@@ -31,20 +40,20 @@
     {{/each}}
 </table>
 <hr>
-<table>
+<table class="table table-dark">
         <tr>
-        <th>
+        <th scope="col">
             Name
         </th>
-        <th>
+        <th scope="col">
             Location
         </th>
-        <th>
+        <th scope="col">
             Brands In Kitchen
         </th>
     </tr>
     {{#each kitchen}}
-    <tr>
+    <tr scope="row">
         <td>
             {{this.name}}
         </td>
@@ -64,3 +73,24 @@
     </tr>
     {{/each}}
 </table>
+<script>
+	//From bootstrap documentation
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

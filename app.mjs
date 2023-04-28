@@ -61,13 +61,32 @@ app.get('/',async (req, res) =>{
     }
     try{
       kitchens = await Kitchens.find({}).populate('Brands','name').sort('-createdAt');
+      console.log(kitchens)
     }catch{
         kitchens = {};
     }
     res.render("table.hbs",{brand:brands,kitchen:kitchens,user:req.user});
 });
 
+app.post('/',async (req,res)=>{
+  let brands = '';
+  let kitchens = '';
+    try{
+        let searchname = req.body.search.trim().replace(/\s+/g, '-').toLowerCase();
+        brands = await Brands.find({slug:searchname}).sort('-createdAt');
+        let locations = brands[0].Locations;
+        kitchens = await Promise.all(locations.map(async (location)=>{
+          let kitchen = await Kitchens.find({Location:location}).populate('Brands','name').sort('-createdAt');
+          return kitchen[0];
+        }))
+        console.log("SEARCHED KITCHENS: ",kitchens)
+    }catch{
+        brands={};
+        kitchens = {};
+    }
 
+  res.render("table.hbs",{brand:brands,kitchen:kitchens,user:req.user});
+});
 
 /* 
   TODO:
@@ -165,7 +184,6 @@ app.post('/addnew', async (req,res)=>{
             Brands:[brandExists['_id']]
           });
           req.user.kitchenposts.push(kitchen['_id']);
-          req.user.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
           //save new kitchen database entry
           kitchen.save().then(saved => console.log('saved')).catch(err => req.status(500).send(err));
         }
