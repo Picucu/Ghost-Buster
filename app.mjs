@@ -101,7 +101,6 @@ app.get('/login', async(req,res)=>{
     res.render("login.hbs")
 });
 
-//Some magic shit happens here I have no fucking idea how it authenticates
 app.post('/login', function(req,res,next) {
   passport.authenticate('local', function(err,user) {
     if(user) {
@@ -113,7 +112,6 @@ app.post('/login', function(req,res,next) {
     }
   })(req, res, next);
 });
-//End of magic shit
 
 
 //Registration Handler
