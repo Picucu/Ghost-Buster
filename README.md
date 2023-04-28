@@ -73,11 +73,9 @@ Here's a [Site map](documentation/Sitemap.png)
 
 ## Research Topics
 
-* (4 points) Google maps integration
+* (5 points) Google maps integration
     I want to do multiple integrations with google maps, not only as embeds but also use it to get address information and auto filling posts with addresses. Also to provide images of the location and see maps popup on hover over the location.
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
+* (5 points) Authentication using Passport
 
 
 10 points total out of 8 required points
