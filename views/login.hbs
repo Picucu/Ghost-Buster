@@ -2,9 +2,43 @@
     let activetab = document.getElementById('login');
     activetab.classList.add('active');
 </script>
-
-<form method="POST" action="">
-		username: <input name="username" type="text">	
-		password: <input name="password" type="password">	
-		<input type="submit" value="Login">	
+{{#if message}}
+	<div class="alert alert-danger" role="alert">
+		{{message}}
+	</div>
+{{/if}}
+<form method="POST" action="" class="needs-validation" novalidate>
+	<br>
+	Username: <input name="username" type="text" class="form-control" required>
+	<div class="invalid-feedback" id='usernameFeedback'>
+          Please enter a username.
+    </div>
+	<br>
+	Password: <input name="password" type="password" class="form-control" required>
+	<div class="invalid-feedback" id="passwordFeedback">
+          Please choose a password.
+    </div>
+	<br>
+	<input type="submit" value="Login" class="btn btn-primary">	
 </form>
+<script>
+	//From bootstrap documentation
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

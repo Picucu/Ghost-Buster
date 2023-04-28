@@ -9,6 +9,7 @@ import passport from 'passport';
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
+import favicon from 'serve-favicon';
 var privateKey  = fs.readFileSync('localhost-key.pem', 'utf8');
 var certificate = fs.readFileSync('localhost.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
@@ -43,7 +44,7 @@ app.use(sanitize({
   replaceWith: '_',
 })
 );
-
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 /* TODO: ADD CLIENT SIDE FORM VALIDATION */
 /* TODO: ADD GOOGLE MAPS FEATURE */
 
@@ -128,7 +129,7 @@ app.get('/addnew', (req,res)=>{
   if(req.user){
     res.render('newBrand.hbs');
   }else{
-    res.render('/login');
+    res.redirect('/login');
   }
 });
 

@@ -2,12 +2,45 @@
     let activetab = document.getElementById('newKitchen');
     activetab.classList.add('active');
 </script>
+<h1>ADD A NEW Kitchen HERE</h1>
+    {{!-- I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+         --}}
+        <script async
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8txkx3TcrxXxg-jhi5_VlIZJAP_MEXjo&libraries=places&callback=initAutoComplete">
+        </script>
+        {{!-- I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK 
+        I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK I HATE ADBLOCK  --}}
+        <script>
+            function initAutoComplete() {
+                let input = document.getElementById('Location');
+                let autocomplete = new google.maps.places.Autocomplete(input,
+                    {
+                        type:['establishment'],
+                        componentRestrictions:{'country':['us']},
+                        fields:['formatted_address']
+                    }
+                    
+                    
+                );
+            }
+        </script>
+{{#if message}}
+    <h2>{{message}}</h2>
+{{/if}}
 <div>
-    <form id="newKitchenPoster" method="POST" action="/addnewKitchen">
-        Kitchen name:<input type="text" name="KitchenName">
+    <form id="newKitchenPoster" method="POST" action="/addnewKitchen" class="form-group">
         <br>
-        Kitchen Location:<input type="text" name="KitchenLocation">
+        Kitchen name:<input type="text" name="KitchenName" class="form-control">
         <br>
-        <input type="Submit" value="Submit">
+        Kitchen Location:<input type="text" name="Location" id="Location" class="form-control" required>
+        <br>
+        <input type="Submit" value="Submit" class="btn btn-primary">
     </form>
 </div>
