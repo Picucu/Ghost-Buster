@@ -1,4 +1,4 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
+
 
 # Ghost Restaurant Records
 
@@ -86,4 +86,5 @@ Here's a [Site map](documentation/Sitemap.png)
 ## [Link to Initial Main Project File](app.mjs) 
 
 ## Annotations / References Used
-
+https://getbootstrap.com/docs/5.0/examples/sidebars/
+https://getbootstrap.com/docs/5.0/forms/validation/
