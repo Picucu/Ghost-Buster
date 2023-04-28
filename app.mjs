@@ -56,7 +56,6 @@ app.get('/',async (req, res) =>{
     }
     try{
       kitchens = await Kitchens.find({}).populate('Brands','name').sort('-createdAt');
-      console.log(kitchens)
     }catch{
         kitchens = {};
     }
@@ -74,7 +73,6 @@ app.post('/',async (req,res)=>{
           let kitchen = await Kitchens.find({Location:location}).populate('Brands','name').sort('-createdAt');
           return kitchen[0];
         }))
-        console.log("SEARCHED KITCHENS: ",kitchens)
     }catch{
         brands={};
         kitchens = {};
